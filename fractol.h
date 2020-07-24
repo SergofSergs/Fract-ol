@@ -6,7 +6,7 @@
 /*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 15:38:30 by oem               #+#    #+#             */
-/*   Updated: 2020/07/23 23:04:01 by oem              ###   ########.fr       */
+/*   Updated: 2020/07/24 17:58:31 by oem              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "minilibx_macos/mlx.h"
 # include <pthread.h>
 # include <math.h>
-# define WIDTH 960
-# define HEIGHT 640
+# define WIDTH 1280
+# define HEIGHT 720
 # define ITT 255
 
 typedef struct		s_mlx
@@ -30,12 +30,19 @@ typedef struct		s_mlx
 	int				bpp;
 	int				size_line;
 	int				endian;
-	double			L;
+	int				color;
+	int				x0;
+	int				y0;
+	double			l;
 }					t_mlx;
 
 int					ret(int code, t_mlx *mlx);
 int					name_check(char *str);
-int					get_color(double x, double y);
+int					get_color(double x, double y, int color);
 void				mandelbrot(t_mlx *mlx);
+int					key_hook(int key, t_mlx *mlx);
+void				zoom(int key, t_mlx *mlx);
+void				controls(t_mlx *mlx);
+t_mlx				*mlx_initial(char *str);
 
 #endif
