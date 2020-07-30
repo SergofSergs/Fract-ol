@@ -6,13 +6,13 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 09:37:31 by pjoseth           #+#    #+#             */
-/*   Updated: 2019/09/21 15:39:15 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/02/04 18:42:58 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	int		countwords(const char *s, char c)
+int				countwords(const char *s, char c)
 {
 	int	word;
 	int	i;
@@ -21,7 +21,7 @@ static	int		countwords(const char *s, char c)
 	word = 0;
 	while (s[i])
 	{
-		if (s[i] == c && s[i + 1] != c)
+		if (s[i] == c && s[i + 1] != c && (s[i + 1]))
 			word++;
 		i++;
 	}

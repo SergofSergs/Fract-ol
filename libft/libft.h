@@ -6,17 +6,17 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/08 15:44:52 by pjoseth           #+#    #+#             */
-/*   Updated: 2019/09/25 14:01:37 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/01/19 16:00:03 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 # define BUFF_SIZE 32
-
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 
 typedef	struct		s_list
 {
@@ -25,6 +25,8 @@ typedef	struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+int					countwords(const char *s, char c);
+int					get_next_line(const int fd, char **line);
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 void				ft_lstadd(t_list **alst, t_list *new);
@@ -87,6 +89,5 @@ void				ft_putchar(char c);
 void				ft_putstr_fd(const char *s, int fd);
 void				ft_putstr(const char *s);
 void				*ft_memset(void *b, int c, size_t len);
-int					get_next_line(const int fd, char **line);
 
 #endif

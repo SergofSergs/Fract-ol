@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 16:12:38 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/07/22 13:57:20 by oem              ###   ########.fr       */
+/*   Updated: 2020/01/04 17:08:18 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,16 +88,16 @@ int		get_next_line(const int fd, char **line)
 		|| !(list = load(fd, &history)) || BUFF_SIZE < 1)
 		return (-1);
 	str = list->content;
-	readres = readline(fd, &str);
+	if ((readres = readline(fd, &str)) == -1)
+		return (-1);
 	list->content = str;
 	if (readres == 0 && !*str)
 		return (0);
-	if (readres == -1)
+	if ((readres = copytoline(line, str)) == -1)
 		return (-1);
-	readres = copytoline(line, str);
 	if (str[readres] != '\0')
 	{
-		list->content = ft_strdup(list->content + readres + 1);
+		list->content = ft_strdup(&((list->content)[readres + 1]));
 		free(str);
 	}
 	else
