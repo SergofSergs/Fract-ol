@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 16:12:38 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/01/04 17:08:18 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/02 22:46:41 by oem              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 	if (str[readres] != '\0')
 	{
-		list->content = ft_strdup(&((list->content)[readres + 1]));
+		list->content = ft_strdup(list->content + readres + 1);
 		free(str);
 	}
 	else
