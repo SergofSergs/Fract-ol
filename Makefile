@@ -6,7 +6,7 @@
 #    By: oem <oem@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/22 20:38:45 by oem               #+#    #+#              #
-#    Updated: 2020/07/24 17:59:43 by oem              ###   ########.fr        #
+#    Updated: 2020/08/02 23:29:59 by oem              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,18 +19,25 @@ minilibx = minilibx_macos -lmlx_Linux -lXext -lX11
 POST_FLAGS = -lm
 
 all: $(NAME)
-	$(CC) -o $(NAME) $(C_FLAGS) $(OBJ) -L $(libft) -L $(minilibx) $(POST_FLAGS)
+
 $(NAME): $(OBJ)
-	make -C ./libft
-	make -C ./minilibx_macos 
+	@echo "Making libs..."
+	@make -s -C ./libft
+	@make -s -C ./minilibx_macos
+	@$(CC) -o $(NAME) $(C_FLAGS) $(OBJ) -L $(libft) -L $(minilibx) $(POST_FLAGS)
+	@echo "./fractol created"
+	@echo "Usage: ./fractol FRACTAL_NAME"
+	@echo "Avalible names: mandelbrot, julia and burning_ship"
 %.o: %.c
-	$(CC) $(C_FLAGS) -o $@ -c $<
+	@$(CC) $(C_FLAGS) -o $@ -c $<
 clean:
-	make clean -C ./libft 
-	rm -rf minilibx_macos/*.o
+	@make clean -s -C ./libft 
+	@rm -rf minilibx_macos/*.o
+	@echo "O-files deleted"
 fclean: clean
-	make fclean -C ./libft
-	make clean -C ./minilibx_macos
-	rm -rf $(OBJ)
-	rm -rf $(NAME)
+	@make fclean -s -C ./libft
+	@make clean -s -C ./minilibx_macos
+	@rm -rf $(OBJ)
+	@rm -rf $(NAME)
+	@echo "Full cleaned"
 re: fclean all

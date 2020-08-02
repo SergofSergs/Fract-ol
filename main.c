@@ -6,7 +6,7 @@
 /*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 15:37:03 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/07/24 18:00:44 by oem              ###   ########.fr       */
+/*   Updated: 2020/08/02 23:31:54 by oem              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,20 @@ t_mlx	*mlx_initial(char *str)
 		return (NULL);
 	mlx->ptr = mlx_init();
 	mlx->win = mlx_new_window(mlx->ptr, WIDTH, HEIGHT, str);
-	mlx->l = 320.0;
-	mlx->x0 = (3 * WIDTH) / 4;
-	mlx->y0 = HEIGHT / 2;
+	mlx->min_re = -2;
+	mlx->max_re = 2.2;
+	mlx->min_im = -1.2;
+	mlx->max_im = mlx->min_im + \
+		(((mlx->max_re - mlx->min_re) * HEIGHT) / WIDTH);
+	mlx->zoom = 1;
 	return (mlx);
 }
 
 int		main(int argc, char **argv)
 {
 	t_mlx	*mlx;
-	int		color;
 
 	mlx = NULL;
-	color = 0xF3F3F3;
 	if (argc != 2)
 		return (ret(1, mlx));
 	if (!(mlx = mlx_initial(argv[1])))
