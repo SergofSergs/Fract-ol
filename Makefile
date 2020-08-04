@@ -6,7 +6,7 @@
 #    By: oem <oem@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/22 20:38:45 by oem               #+#    #+#              #
-#    Updated: 2020/08/02 23:29:59 by oem              ###   ########.fr        #
+#    Updated: 2020/08/04 20:55:24 by oem              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ C_FLAGS = -g -Wall -Wextra -Werror
 OBJ = main.o check.o mandelbrot.o khook.o
 libft = libft -lft
 minilibx = minilibx_macos -lmlx_Linux -lXext -lX11
-POST_FLAGS = -lm
+POST_FLAGS = -lm -lpthread
 
 all: $(NAME)
 
@@ -33,11 +33,11 @@ $(NAME): $(OBJ)
 clean:
 	@make clean -s -C ./libft 
 	@rm -rf minilibx_macos/*.o
+	@rm -rf $(OBJ)
 	@echo "O-files deleted"
 fclean: clean
 	@make fclean -s -C ./libft
 	@make clean -s -C ./minilibx_macos
-	@rm -rf $(OBJ)
 	@rm -rf $(NAME)
 	@echo "Full cleaned"
 re: fclean all

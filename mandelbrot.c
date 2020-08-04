@@ -6,7 +6,7 @@
 /*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 18:25:06 by oem               #+#    #+#             */
-/*   Updated: 2020/08/02 22:51:30 by oem              ###   ########.fr       */
+/*   Updated: 2020/08/04 21:16:59 by oem              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,38 @@ double	get_coim(int j, t_mlx *mlx)
 	return (co_im);
 }
 
-void	mandelbrot(t_mlx *mlx)
+void	mandelbrot_thr(t_mlx *mlx)
 {
+	pthread_t	thread[THREADS];
+	t_mlx		xlm[THREADS];
+	int			i;
+
+	i = 0;
+	while (i < THREADS)
+	{
+		ft_memcpy((void *)&xlm[i], (void*)mlx, sizeof(t_mlx));
+		xlm[i].y_start = i * THR_W;
+		xlm[i].y_max = (i + 1) * THR_W;
+		pthread_create(&thread[i], NULL, mandelbrot, &xlm[i]);
+		i++;
+	}
+	while (i--)
+		pthread_join(thread[i], NULL);
+	mlx_put_image_to_window(mlx->ptr, mlx->win, mlx->img, 0, 0);
+}
+
+void	*mandelbrot(void *xlm)
+{
+	t_mlx	*mlx;
 	int		i;
 	int		j;
 
+	mlx = (t_mlx*)xlm;
 	i = 0;
-	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
-	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
-		&mlx->bpp, &mlx->size_line, &mlx->endian);
 	while (i < WIDTH)
 	{
-		j = 0;
-		while (j < HEIGHT)
+		j = mlx->y_start;
+		while (j < mlx->y_max)
 		{
 			mlx->color = 0xFFFFFF;
 			mlx->color = get_color(get_core(i, mlx), \
@@ -78,5 +97,5 @@ void	mandelbrot(t_mlx *mlx)
 		}
 		i++;
 	}
-	mlx_put_image_to_window(mlx->ptr, mlx->win, mlx->img, 0, 0);
+	return (xlm);
 }

@@ -6,7 +6,7 @@
 /*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 15:37:03 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/08/02 23:31:54 by oem              ###   ########.fr       */
+/*   Updated: 2020/08/04 21:18:13 by oem              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,13 @@ int		main(int argc, char **argv)
 		return (0);
 	if (!(mlx->fract = name_check(argv[1])))
 		return (ret(2, mlx));
-	mandelbrot(mlx);
+	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
+	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
+		&mlx->bpp, &mlx->size_line, &mlx->endian);
+	mandelbrot_thr(mlx);
 	controls(mlx);
 	mlx_key_hook(mlx->win, key_hook, mlx);
+	mlx_mouse_hook(mlx->win, mouse_hook, mlx);
 	mlx_loop(mlx->ptr);
 	return (1);
 }
