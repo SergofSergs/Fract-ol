@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: oem <oem@student.42.fr>                    +#+  +:+       +#+         #
+#    By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/22 20:38:45 by oem               #+#    #+#              #
-#    Updated: 2020/08/04 20:55:24 by oem              ###   ########.fr        #
+#    Updated: 2020/08/05 17:36:32 by pjoseth          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 CC = clang
 C_FLAGS = -g -Wall -Wextra -Werror
-OBJ = main.o check.o mandelbrot.o khook.o
+OBJ = main.o check.o mandelbrot.o khook.o zoom.o
 libft = libft -lft
 minilibx = minilibx_macos -lmlx_Linux -lXext -lX11
 POST_FLAGS = -lm -lpthread
