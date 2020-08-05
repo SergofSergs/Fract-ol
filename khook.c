@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   khook.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/24 15:57:53 by oem               #+#    #+#             */
-/*   Updated: 2020/08/04 20:41:49 by oem              ###   ########.fr       */
+/*   Updated: 2020/08/05 16:38:57 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,32 @@
 
 int		key_hook(int key, t_mlx *mlx)
 {
-	if (key == 65307)
+	char *s1;
+	char *s2;
+
+	s1 = ft_itoa(key);
+	s2 = ft_strjoin(s1, "\n");
+	if (key == 53)
 	{
 		free(mlx);
 		exit(0);
 	}
-	ft_putstr(ft_strjoin(ft_itoa(key), "\n"));
-	if (key == 99)
+	ft_putstr(s2);
+	free(s1);
+	free(s2);
+	if (key == 8)
 		controls(mlx);
 	return (0);
 }
 
 void	controls(t_mlx *mlx)
 {
-	int posx;
+	int		posx;
+	char	*s1;
+	char	*s2;
 
+	s1 = ft_itoa(mlx->itt_max);
+	s2 = ft_strjoin("Max_itterations: ", s1);
 	posx = 17;
 	if (mlx->img != NULL)
 	{
@@ -40,56 +51,19 @@ void	controls(t_mlx *mlx)
 		posx * 2, 0x000000, "Exit the programm: ESC");
 	mlx_string_put(mlx->ptr, mlx->win, 10, \
 		posx * 3, 0x000000, "Show controls: c");
-}
-
-double	interpolate(double start, double end, double interp)
-{
-	double new;
-
-	new = start + ((end - start) * interp);
-	return (new);
-}
-
-void	calculate_new_pos(double mouse_re, double mouse_im, double interp, t_mlx *mlx)
-{
-	mlx->min_re = interpolate(mouse_re, mlx->min_re, interp);
-	mlx->max_re = interpolate(mouse_re, mlx->max_re, interp);
-	mlx->min_im = interpolate(mouse_im, mlx->min_im, interp);
-	mlx->max_im = interpolate(mouse_im, mlx->max_im, interp);
+	mlx_string_put(mlx->ptr, mlx->win, 10, \
+		posx * 4, 0x000000, "Zoom with the mouse wheel");
+	mlx_string_put(mlx->ptr, mlx->win, 10, \
+		posx * 5, 0xFF0000, s2);
+	free(s1);
+	free(s2);
 }
 
 int		mouse_hook(int key, int x, int y, t_mlx *mlx)
 {
-	double mouse_re;
-	double mouse_im;
-	double interp;
-
-	mouse_re = (double)x / (WIDTH / (mlx->max_re - mlx->min_re)) + mlx->min_re;
-	mouse_im = (double)y / (HEIGHT / (mlx->max_im - mlx->min_im)) + mlx->min_im;
 	if (key == 4)
-	{
-		if (mlx->img != NULL)
-			mlx_destroy_image(mlx->ptr, mlx->img);
-		mlx->zoom *= 1.05;
-		interp = 1.0 / mlx->zoom;
-		calculate_new_pos(mouse_re, mouse_im, interp, mlx);
-		mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
-		mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
-			&mlx->bpp, &mlx->size_line, &mlx->endian);
-		mandelbrot_thr(mlx);
-
-	}
+		zoom(x, y, mlx);
 	if (key == 5)
-	{
-		if (mlx->img != NULL)
-			mlx_destroy_image(mlx->ptr, mlx->img);
-		mlx->zoom /= 1.05; 
-		interp = 1.0 / mlx->zoom;
-		calculate_new_pos(mouse_re, mouse_im, interp, mlx);
-		mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
-		mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
-			&mlx->bpp, &mlx->size_line, &mlx->endian);
-		mandelbrot_thr(mlx);
-	}
+		unzoom(x, y, mlx);
 	return (0);
 }

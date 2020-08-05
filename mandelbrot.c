@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   mandelbrot.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 18:25:06 by oem               #+#    #+#             */
-/*   Updated: 2020/08/04 21:16:59 by oem              ###   ########.fr       */
+/*   Updated: 2020/08/05 16:54:18 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int		get_color(double x, double y, int color)
+int		get_color(double x, double y, int color, unsigned long long itt_max)
 {
-	int		counter;
-	double	x1;
-	double	y1;
-	double	re;
-	double	im;
+	unsigned long long	counter;
+	double				x1;
+	double				y1;
+	double				re;
+	double				im;
 
 	counter = 0;
 	x1 = x;
 	y1 = y;
-	while (counter < ITT_MAX && color)
+	while (counter < itt_max && color)
 	{
 		re = x1;
 		im = y1;
@@ -34,7 +34,7 @@ int		get_color(double x, double y, int color)
 		y1 = (2 * re * im) + y;
 		counter++;
 	}
-	if (counter == ITT_MAX)
+	if (counter == itt_max)
 		color = 0x000000;
 	return (color);
 }
@@ -90,7 +90,7 @@ void	*mandelbrot(void *xlm)
 		{
 			mlx->color = 0xFFFFFF;
 			mlx->color = get_color(get_core(i, mlx), \
-				get_coim(j, mlx), mlx->color);
+				get_coim(j, mlx), mlx->color, mlx->itt_max);
 			ft_memcpy(mlx->img_data + mlx->size_line * j + i * 4, \
 				&mlx->color, sizeof(int));
 			j++;

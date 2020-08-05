@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oem <oem@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 15:37:03 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/08/04 21:18:13 by oem              ###   ########.fr       */
+/*   Updated: 2020/08/05 17:25:15 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_mlx	*mlx_initial(char *str)
 		return (NULL);
 	mlx->ptr = mlx_init();
 	mlx->win = mlx_new_window(mlx->ptr, WIDTH, HEIGHT, str);
+	mlx->itt_max = 90;
 	mlx->min_re = -2;
 	mlx->max_re = 2.2;
 	mlx->min_im = -1.2;
