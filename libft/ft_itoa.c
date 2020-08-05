@@ -6,13 +6,13 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 15:16:06 by pjoseth           #+#    #+#             */
-/*   Updated: 2019/09/19 17:00:45 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/05 17:01:14 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		lenght(long int n)
+static int		lenght(long long int n)
 {
 	int count;
 
@@ -32,11 +32,11 @@ static int		lenght(long int n)
 	return (count);
 }
 
-char			*ft_itoa(int n)
+char			*ft_itoa(long long int n)
 {
-	long int	nb;
-	char		*new;
-	int			len;
+	long long int	nb;
+	char			*new;
+	int				len;
 
 	nb = n;
 	len = lenght(nb);
