@@ -6,14 +6,14 @@
 #    By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/22 20:38:45 by oem               #+#    #+#              #
-#    Updated: 2020/08/05 17:36:32 by pjoseth          ###   ########.fr        #
+#    Updated: 2020/08/06 18:04:01 by pjoseth          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 CC = clang
 C_FLAGS = -g -Wall -Wextra -Werror
-OBJ = main.o check.o mandelbrot.o khook.o zoom.o
+OBJ = main.o check.o mandelbrot.o khook.o zoom.o julia.o
 libft = libft -lft
 minilibx = minilibx_macos -lmlx_Linux -lXext -lX11
 POST_FLAGS = -lm -lpthread

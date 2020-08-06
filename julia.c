@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mandelbrot.c                                       :+:      :+:    :+:   */
+/*   julia.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/23 18:25:06 by oem               #+#    #+#             */
-/*   Updated: 2020/08/06 17:39:20 by pjoseth          ###   ########.fr       */
+/*   Created: 2020/08/06 16:02:15 by pjoseth           #+#    #+#             */
+/*   Updated: 2020/08/06 17:42:39 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int		get_color(double x, double y, int color, unsigned long long itt_max)
+int		get_color_j(double co_re, double co_im, int color, unsigned long long itt_max, t_mlx *mlx)
 {
 	unsigned long long	counter;
 	double				x1;
@@ -21,8 +21,8 @@ int		get_color(double x, double y, int color, unsigned long long itt_max)
 	double				im;
 
 	counter = 0;
-	x1 = x;
-	y1 = y;
+	x1 = co_re;
+	y1 = co_im;
 	while (counter < itt_max && color)
 	{
 		re = x1;
@@ -30,8 +30,8 @@ int		get_color(double x, double y, int color, unsigned long long itt_max)
 		if (sqrt((x1 * x1) + (y1 * y1)) > 2)
 			return (color);
 		color -= 0x010101;
-		x1 = (re * re) - (im * im) + x;
-		y1 = (2 * re * im) + y;
+		x1 = (re * re) - (im * im) + mlx->k_re;
+		y1 = (2 * re * im) + mlx->k_im;
 		counter++;
 	}
 	if (counter == itt_max)
@@ -39,23 +39,7 @@ int		get_color(double x, double y, int color, unsigned long long itt_max)
 	return (color);
 }
 
-double	get_core(int i, t_mlx *mlx)
-{
-	double co_re;
-
-	co_re = mlx->min_re + (i * (mlx->max_re - mlx->min_re) / (WIDTH - 1));
-	return (co_re);
-}
-
-double	get_coim(int j, t_mlx *mlx)
-{
-	double	co_im;
-
-	co_im = mlx->max_im - (j * (mlx->max_im - mlx->min_im) / (HEIGHT - 1));
-	return (co_im);
-}
-
-void	*mandelbrot(void *xlm)
+void	*julia(void *xlm)
 {
 	t_mlx	*mlx;
 	int		i;
@@ -69,8 +53,8 @@ void	*mandelbrot(void *xlm)
 		while (j < mlx->y_max)
 		{
 			mlx->color = 0xFFFFFF;
-			mlx->color = get_color(get_core(i, mlx), \
-				get_coim(j, mlx), mlx->color, mlx->itt_max);
+			mlx->color = get_color_j(get_core(i, mlx), \
+				get_coim(j, mlx), mlx->color, mlx->itt_max, mlx);
 			ft_memcpy(mlx->img_data + mlx->size_line * j + i * 4, \
 				&mlx->color, sizeof(int));
 			j++;
@@ -78,4 +62,17 @@ void	*mandelbrot(void *xlm)
 		i++;
 	}
 	return (xlm);
+}
+
+int		julia_m(int x, int y, t_mlx *mlx)
+{
+	if (mlx->img != NULL)
+			mlx_destroy_image(mlx->ptr, mlx->img);
+    mlx->k_re = 4 * ((double)x / WIDTH - 0.5),
+    mlx->k_im = 4 * ((double)(HEIGHT - y) / HEIGHT - 0.5);
+	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
+	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
+		&mlx->bpp, &mlx->size_line, &mlx->endian);
+	fractal_thr(mlx);
+    return (0);
 }

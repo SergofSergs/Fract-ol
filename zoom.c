@@ -6,7 +6,7 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/05 16:31:17 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/08/05 17:21:32 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/06 17:40:35 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	zoom(double x, double y, t_mlx *mlx)
 	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
 		&mlx->bpp, &mlx->size_line, &mlx->endian);
 	if (mlx->itt_max < 9000000000000000000)
-	mlx->itt_max *= 1.10;
-	mandelbrot_thr(mlx);
+		mlx->itt_max *= 1.10;
+	fractal_thr(mlx);
 }
 
 void	unzoom(double x, double y, t_mlx *mlx)
@@ -70,5 +70,5 @@ void	unzoom(double x, double y, t_mlx *mlx)
 		&mlx->bpp, &mlx->size_line, &mlx->endian);
 	if (mlx->itt_max > 20)
 		mlx->itt_max /= 1.10;
-	mandelbrot_thr(mlx);
+	fractal_thr(mlx);
 }
