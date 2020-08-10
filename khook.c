@@ -6,7 +6,7 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/24 15:57:53 by oem               #+#    #+#             */
-/*   Updated: 2020/08/06 17:53:20 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/09 19:27:46 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,21 @@
 void	restore_pos(t_mlx *mlx)
 {
 	if (mlx->img != NULL)
-	{	
+	{
 		mlx_destroy_image(mlx->ptr, mlx->img);
 		mlx->img = NULL;
 	}
-	if (mlx->fract == 1)
-	{
-		mlx->itt_max = 90;
-		mlx->min_re = -2;
-		mlx->max_re = 2.2;
-		mlx->min_im = -1.2;
-		mlx->max_im = mlx->min_im + \
-			(((mlx->max_re - mlx->min_re) * HEIGHT) / WIDTH);
-		mlx->zoom = 1;
-		mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
-		mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
-			&mlx->bpp, &mlx->size_line, &mlx->endian);
-		fractal_thr(mlx);
-	}
+	mlx->itt_max = 50;
+	mlx->min_re = -2;
+	mlx->max_re = 2.2;
+	mlx->min_im = -1.2;
+	mlx->max_im = mlx->min_im + \
+		(((mlx->max_re - mlx->min_re) * HEIGHT) / WIDTH);
+	mlx->zoom = 1;
+	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
+	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
+		&mlx->bpp, &mlx->size_line, &mlx->endian);
+	fractal_thr(mlx);
 }
 
 int		key_hook(int key, t_mlx *mlx)
@@ -54,7 +51,28 @@ int		key_hook(int key, t_mlx *mlx)
 		controls(mlx);
 	if (key == 15)
 		restore_pos(mlx);
+	if (key == 1 || key == 5)
+		julia_stop(key, mlx);
+	if (key == 75 || key == 67)
+		itterations(key, mlx);
 	return (0);
+}
+
+void	put_text(int posx, char *s2, t_mlx *mlx)
+{
+	mlx_string_put(mlx->ptr, mlx->win, 10, posx, 0x000000, "Controls");
+	mlx_string_put(mlx->ptr, mlx->win, 10, \
+		posx * 2, 0x000000, "Exit the programm: ESC");
+	mlx_string_put(mlx->ptr, mlx->win, 10, \
+		posx * 3, 0x000000, "Show controls: c");
+	mlx_string_put(mlx->ptr, mlx->win, 10, \
+		posx * 4, 0x000000, "Zoom with the mouse wheel");
+	mlx_string_put(mlx->ptr, mlx->win, 10, \
+		posx * 5, 0x000000, "Reset position: r");
+	mlx_string_put(mlx->ptr, mlx->win, 10, \
+		posx * 6, 0x000000, "Increase or decrease itterations: * and /");
+	mlx_string_put(mlx->ptr, mlx->win, 10, \
+		posx * 7, 0xFF0000, s2);
 }
 
 void	controls(t_mlx *mlx)
@@ -71,17 +89,7 @@ void	controls(t_mlx *mlx)
 		mlx_destroy_image(mlx->ptr, mlx->img);
 		mlx->img = NULL;
 	}
-	mlx_string_put(mlx->ptr, mlx->win, 10, posx, 0x000000, "Controls");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 2, 0x000000, "Exit the programm: ESC");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 3, 0x000000, "Show controls: c");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 4, 0x000000, "Zoom with the mouse wheel");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 5, 0x000000, "Reset position: r");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 6, 0xFF0000, s2);
+	put_text(posx, s2, mlx);
 	free(s1);
 	free(s2);
 }

@@ -6,7 +6,7 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 15:37:03 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/08/06 17:39:11 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/09 18:00:22 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_mlx	*mlx_initial(char *str)
 		return (NULL);
 	mlx->ptr = mlx_init();
 	mlx->win = mlx_new_window(mlx->ptr, WIDTH, HEIGHT, str);
-	mlx->itt_max = 90;
+	mlx->itt_max = 50;
 	mlx->min_re = -2;
 	mlx->max_re = 2.2;
 	mlx->min_im = -1.2;
@@ -29,6 +29,7 @@ t_mlx	*mlx_initial(char *str)
 	mlx->k_im = 0.6;
 	mlx->max_im = mlx->min_im + \
 		(((mlx->max_re - mlx->min_re) * HEIGHT) / WIDTH);
+	mlx->stop = 0;
 	mlx->zoom = 1;
 	return (mlx);
 }
@@ -49,6 +50,8 @@ void	fractal_thr(t_mlx *mlx)
 			pthread_create(&thread[i], NULL, mandelbrot, &xlm[i]);
 		if (mlx->fract == 2)
 			pthread_create(&thread[i], NULL, julia, &xlm[i]);
+		if (mlx->fract == 3)
+			pthread_create(&thread[i], NULL, burning_ship, &xlm[i]);
 		i++;
 	}
 	while (i--)
@@ -67,6 +70,8 @@ int		main(int argc, char **argv)
 		return (0);
 	if (!(mlx->fract = name_check(argv[1])))
 		return (ret(2, mlx));
+	if (mlx->fract == 2)
+		mlx->itt_max = 256;
 	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
 	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
 		&mlx->bpp, &mlx->size_line, &mlx->endian);
