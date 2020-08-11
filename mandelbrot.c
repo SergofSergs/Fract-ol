@@ -6,26 +6,36 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 18:25:06 by oem               #+#    #+#             */
-/*   Updated: 2020/08/09 19:22:16 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/11 17:22:16 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int		get_color(double abs_z, int itt)
+int		get_ultra(int itt)
 {
-	double				continuous_index;
-	unsigned char		p1;
-	unsigned char		p2;
-	unsigned char		p3;
-	int					color;
+	int		color;
+	int		n;
 
 	color = 0x000000;
-	continuous_index = itt + 1 - (log(2) / abs_z) / log(2);
-	p1 = (unsigned char)(sin(0.016 * continuous_index + 4) * 230 + 25);
-	p2 = (unsigned char)(sin(0.013 * continuous_index + 2) * 230 + 25);
-	p3 = (unsigned char)(sin(0.01 * continuous_index + 1) * 230 + 25);
-	color = p3 + (p2 * 0x10 * 0x10) + (p1 * 0x10 * 0x10 * 0x10 * 0x10);
+	if (itt == 0)
+		return (color);
+	n = itt % 16;
+	if (n == 0)
+		color = 15 + (30 * 0x10 * 0x10) + (66 * 0x10 * 0x10 * 0x10 * 0x10);
+	if (n == 1)
+		color = 26 + (7 * 0x10 * 0x10) + (25 * 0x10 * 0x10 * 0x10 * 0x10);
+	if (n == 2)
+		color = 47 + (1 * 0x10 * 0x10) + (9 * 0x10 * 0x10 * 0x10 * 0x10);
+	if (n == 3)
+		color = 73 + (4 * 0x10 * 0x10) + (4 * 0x10 * 0x10 * 0x10 * 0x10);
+	if (n == 4)
+		color = 100 + (7 * 0x10 * 0x10) + (0 * 0x10 * 0x10 * 0x10 * 0x10);
+	if (n == 5)
+		color = 138 + (44 * 0x10 * 0x10) + (12 * 0x10 * 0x10 * 0x10 * 0x10);
+	if (n == 6)
+		color = 177 + (82 * 0x10 * 0x10) + (24 * 0x10 * 0x10 * 0x10 * 0x10);
+	color = get_color_7_15(n, color);
 	return (color);
 }
 
@@ -45,10 +55,9 @@ int		calculate_m(double x, double y, int color, t_mlx *mlx)
 		re = x1;
 		im = y1;
 		if (sqrt((x1 * x1) + (y1 * y1)) > 2)
-		{
-			color = get_color(sqrt((x1 * x1) + (y1 * y1)), counter);
-			return (color);
-		}
+			return (which_color(color, counter, mlx));
+		if (mlx->c_num == 1 && color)
+			color -= 0x010101;
 		x1 = (re * re) - (im * im) + x;
 		y1 = (2 * re * im) + y;
 		counter++;

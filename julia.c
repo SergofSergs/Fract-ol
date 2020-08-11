@@ -6,7 +6,7 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 16:02:15 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/08/09 19:21:54 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/11 17:23:29 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int		calculate_j(double co_re, double co_im, int color, t_mlx *mlx)
 		re = x1;
 		im = y1;
 		if (sqrt((x1 * x1) + (y1 * y1)) > 2)
-			return (color);
-		if (color)
+			return (which_color(color, counter, mlx));
+		if (mlx->c_num == 1 && color)
 			color -= 0x010101;
 		x1 = (re * re) - (im * im) + mlx->k_re;
 		y1 = (2 * re * im) + mlx->k_im;

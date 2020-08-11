@@ -6,11 +6,20 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/05 16:31:17 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/08/09 19:23:35 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/11 14:37:20 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
+
+int		mouse_hook(int key, int x, int y, t_mlx *mlx)
+{
+	if (key == 4)
+		zoom(x, y, mlx);
+	if (key == 5)
+		unzoom(x, y, mlx);
+	return (0);
+}
 
 double	interpolate(double start, double end, double interp)
 {
@@ -63,20 +72,6 @@ void	unzoom(double x, double y, t_mlx *mlx)
 	mlx->zoom = 0.9;
 	interp = 1.0 / mlx->zoom;
 	calculate_new_pos(mouse_re, mouse_im, interp, mlx);
-	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
-	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
-		&mlx->bpp, &mlx->size_line, &mlx->endian);
-	fractal_thr(mlx);
-}
-
-void	itterations(int key, t_mlx *mlx)
-{
-	if (mlx->img != NULL)
-		mlx_destroy_image(mlx->ptr, mlx->img);
-	if (key == 75 && mlx->itt_max >= 50)
-		mlx->itt_max /= 1.5;
-	if (key == 67 && mlx->itt_max <= 1000)
-		mlx->itt_max *= 1.5;
 	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
 	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
 		&mlx->bpp, &mlx->size_line, &mlx->endian);

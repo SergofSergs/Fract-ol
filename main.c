@@ -6,7 +6,7 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 15:37:03 by pjoseth           #+#    #+#             */
-/*   Updated: 2020/08/09 18:00:22 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/11 14:58:33 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_mlx	*mlx_initial(char *str)
 		(((mlx->max_re - mlx->min_re) * HEIGHT) / WIDTH);
 	mlx->stop = 0;
 	mlx->zoom = 1;
+	mlx->c_num = 0;
 	return (mlx);
 }
 
@@ -70,8 +71,6 @@ int		main(int argc, char **argv)
 		return (0);
 	if (!(mlx->fract = name_check(argv[1])))
 		return (ret(2, mlx));
-	if (mlx->fract == 2)
-		mlx->itt_max = 256;
 	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
 	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
 		&mlx->bpp, &mlx->size_line, &mlx->endian);

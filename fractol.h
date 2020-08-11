@@ -6,7 +6,7 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 15:38:30 by oem               #+#    #+#             */
-/*   Updated: 2020/08/09 19:15:55 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/11 17:21:34 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,29 +43,48 @@ typedef struct		s_mlx
 	double			k_re;
 	double			k_im;
 	int				stop;
+	int				c_num;
 }					t_mlx;
+
+t_mlx				*mlx_initial(char *str);
+void				fractal_thr(t_mlx *mlx);
 
 int					ret(int code, t_mlx *mlx);
 int					name_check(char *str);
+
+int					get_ultra(int itt);
 int					calculate_m(double x, double y, int color, t_mlx *mlx);
-void				*mandelbrot(void *xlm);
 double				get_core(int i, t_mlx *mlx);
 double				get_coim(int j, t_mlx *mlx);
+void				*mandelbrot(void *xlm);
+
 int					key_hook(int key, t_mlx *mlx);
 void				controls(t_mlx *mlx);
-t_mlx				*mlx_initial(char *str);
+void				restore_pos(t_mlx *mlx);
+void				itterations(int key, t_mlx *mlx);
+void				arrows_move(int key, t_mlx *mlx);
+
 int					mouse_hook(int key, int x, int y, t_mlx *mlx);
-void				fractal_thr(t_mlx *mlx);
-void				zoom(double x, double y, t_mlx *mlx);
-void				unzoom(double x, double y, t_mlx *mlx);
+double				interpolate(double start, double end, double interp);
 void				calculate_new_pos(double mouse_re,
 	double mouse_im, double interp, t_mlx *mlx);
-double				interpolate(double start, double end, double interp);
+void				zoom(double x, double y, t_mlx *mlx);
+void				unzoom(double x, double y, t_mlx *mlx);
+
+int					calculate_j(double co_re, double co_im,
+	int color, t_mlx *mlx);
 void				*julia(void *xlm);
 int					julia_m(int x, int y, t_mlx *mlx);
 void				julia_stop(int key, t_mlx *mlx);
+
+int					calculate_bs(double co_re, double co_im,
+	int color, t_mlx *mlx);
 void				*burning_ship(void *xlm);
-int					get_color(double abs_z, int itt);
-void				itterations(int key, t_mlx *mlx);
+
+void				put_text(int posx, int posy, char *s2, t_mlx *mlx);
+void				color_switch(int key, t_mlx *mlx);
+int					which_color(int color, int counter, t_mlx *mlx);
+int					get_color_7_15(int n, int color);
+void				calc_arrows(double re, double im, int key, t_mlx *mlx);
 
 #endif

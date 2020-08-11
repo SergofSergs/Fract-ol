@@ -6,11 +6,55 @@
 /*   By: pjoseth <pjoseth@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/24 15:57:53 by oem               #+#    #+#             */
-/*   Updated: 2020/08/09 19:27:46 by pjoseth          ###   ########.fr       */
+/*   Updated: 2020/08/11 17:18:41 by pjoseth          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
+
+int		key_hook(int key, t_mlx *mlx)
+{
+	if (key == 53)
+	{
+		free(mlx);
+		exit(0);
+	}
+	if (key == 116)
+		color_switch(key, mlx);
+	if (key == 8)
+		controls(mlx);
+	if (key == 15)
+		restore_pos(mlx);
+	if (key == 1 || key == 5)
+		julia_stop(key, mlx);
+	if (key == 75 || key == 67)
+		itterations(key, mlx);
+	if (key == 126 || key == 123 || key == 125 || key == 124)
+		arrows_move(key, mlx);
+	return (0);
+}
+
+void	controls(t_mlx *mlx)
+{
+	int		posx;
+	int		posy;
+	char	*s1;
+	char	*s2;
+
+	s1 = ft_itoa(mlx->itt_max);
+	s2 = ft_strjoin("Max_itterations: ", s1);
+	posx = WIDTH * 3 / 8;
+	posy = HEIGHT / 3;
+	if (mlx->img != NULL)
+	{
+		mlx_destroy_image(mlx->ptr, mlx->img);
+		mlx_clear_window(mlx->ptr, mlx->win);
+		mlx->img = NULL;
+	}
+	put_text(posx, posy, s2, mlx);
+	free(s1);
+	free(s2);
+}
 
 void	restore_pos(t_mlx *mlx)
 {
@@ -32,73 +76,35 @@ void	restore_pos(t_mlx *mlx)
 	fractal_thr(mlx);
 }
 
-int		key_hook(int key, t_mlx *mlx)
+void	itterations(int key, t_mlx *mlx)
 {
-	char *s1;
-	char *s2;
-
-	s1 = ft_itoa(key);
-	s2 = ft_strjoin(s1, "\n");
-	if (key == 53)
-	{
-		free(mlx);
-		exit(0);
-	}
-	ft_putstr(s2);
-	free(s1);
-	free(s2);
-	if (key == 8)
-		controls(mlx);
-	if (key == 15)
-		restore_pos(mlx);
-	if (key == 1 || key == 5)
-		julia_stop(key, mlx);
-	if (key == 75 || key == 67)
-		itterations(key, mlx);
-	return (0);
+	if (mlx->img != NULL)
+		mlx_destroy_image(mlx->ptr, mlx->img);
+	if (key == 75 && mlx->itt_max >= 50)
+		mlx->itt_max /= 1.5;
+	if (key == 67 && mlx->itt_max <= 1000)
+		mlx->itt_max *= 1.5;
+	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
+	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
+		&mlx->bpp, &mlx->size_line, &mlx->endian);
+	fractal_thr(mlx);
 }
 
-void	put_text(int posx, char *s2, t_mlx *mlx)
+void	arrows_move(int key, t_mlx *mlx)
 {
-	mlx_string_put(mlx->ptr, mlx->win, 10, posx, 0x000000, "Controls");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 2, 0x000000, "Exit the programm: ESC");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 3, 0x000000, "Show controls: c");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 4, 0x000000, "Zoom with the mouse wheel");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 5, 0x000000, "Reset position: r");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 6, 0x000000, "Increase or decrease itterations: * and /");
-	mlx_string_put(mlx->ptr, mlx->win, 10, \
-		posx * 7, 0xFF0000, s2);
-}
+	double	re;
+	double	im;
 
-void	controls(t_mlx *mlx)
-{
-	int		posx;
-	char	*s1;
-	char	*s2;
-
-	s1 = ft_itoa(mlx->itt_max);
-	s2 = ft_strjoin("Max_itterations: ", s1);
-	posx = 17;
 	if (mlx->img != NULL)
 	{
 		mlx_destroy_image(mlx->ptr, mlx->img);
 		mlx->img = NULL;
 	}
-	put_text(posx, s2, mlx);
-	free(s1);
-	free(s2);
-}
-
-int		mouse_hook(int key, int x, int y, t_mlx *mlx)
-{
-	if (key == 4)
-		zoom(x, y, mlx);
-	if (key == 5)
-		unzoom(x, y, mlx);
-	return (0);
+	re = fabs(mlx->max_re - mlx->min_re);
+	im = fabs(mlx->max_im - mlx->min_im);
+	calc_arrows(re, im, key, mlx);
+	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
+	mlx->img_data = (unsigned char*)mlx_get_data_addr(mlx->img, \
+		&mlx->bpp, &mlx->size_line, &mlx->endian);
+	fractal_thr(mlx);
 }
